@@ -4,12 +4,12 @@
     <style>
         .progress {
         width:0%;
-        height:30px;
-        background:yellow;
+        height:20px;
+        background:grey;
         
         }
         .bar {
-        height:30px;
+        height:20px;
         width:100%;
         background:black;
         }
@@ -37,7 +37,7 @@
             </div>
             <div class="col s4">
                 <!-- scrollable -->
-                <div class="collection" style="margin:0px;">
+                <div class="collection" style="margin:0px; overflow-y:scroll; height:300px;">
                             <a href="#!" class="collection-item">Image1</a>
                             <a href="#!" class="collection-item active">Image2</a>
                             <a href="#!" class="collection-item">Image3</a>
@@ -53,17 +53,24 @@
                 <br>
                 <center>
                     <div>
-                        <a href="{% url 'object_detection' %}" class="waves-effect waves-light btn" style="background-color: black">Upload</a>
+                        <form action="{% url 'object_detection' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+
+                            <button class="btn waves-effect waves-light" style="background-color:black;"
+                                type="submit" name="action">UPLOAD
+                            </button>
+                        </form>
                     </div>
                 </center>
             </div>
         </div>
         
-        Progress: 
-        <div class="status"></div>
-                <div class="bar">
-                    <div class="progress"></div>
-                </div>
+        <p class="progress_percentage"> Progress:</p>
+        <div class="bar">
+            <div class="progress">
+
+            </div>
         </div>
     
 
@@ -72,5 +79,49 @@
 
 </div>
 
-           
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+<!-- handling progress bar -->
+ <script type="text/javascript">
+    var poll_xhr;
+    var willstop = 0;
+    (function(){
+    var poll = function(){
+      var json_dump = "{{ data }}";
+      var task_id = "{{task_id}}";
+      console.log(task_id);
+      poll_xhr = $.ajax({
+        url:'{% url "od_poll_state" %}',
+        type: 'POST',
+        data: {
+            task_id: task_id,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        success: function(result) {
+            console.log(result)
+                    if (result.process_percent == null || result.process_percent == undefined) {
+                        willstop = 1;
+                       } 
+                    else if (result.process_percent == 100) {
+                        willstop = 1;
+                        jQuery('.progress').css({'width': 100 + '%'});
+                        jQuery('.progress_percentage').html('Progress: 100%');
+                        // jquery to update the result data based on result.result_data passsed by get_task_status
+                       } 
+                    else {
+                         jQuery('.progress').css({'width': result.process_percent + '%'});
+                         jQuery('.progress_percentage').html('Progress: ' + result.process_percent + '%');
+                       };
+                    }
+      });
+    };
+        var refreshIntervalId = setInterval(function() {
+      poll();
+      if(willstop == 1){
+        clearInterval(refreshIntervalId);
+      }
+    },500);
+   })();
+ </script>
+
 {% endblock %}
