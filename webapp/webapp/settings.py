@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'object_detection',
-    'learn_fashion',
 ]
 
 MIDDLEWARE = [
