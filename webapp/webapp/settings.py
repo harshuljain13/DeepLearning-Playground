@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'object_detection',
+    'dogs_classification',
 ]
 
 MIDDLEWARE = [
