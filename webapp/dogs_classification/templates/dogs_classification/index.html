@@ -33,7 +33,9 @@
         </div>
         <div class="row">
             <div class="col s8">
-                <img width="400px" height="300px" src="{% static "dogs_classification/images/dogs_classification.jpg" %}">
+                {% if filename %}
+                    <img width="400px" height="300px" src="{{MEDIA_URL}}{{filename}}">
+                {% endif %}
             </div>
             <div class="col s4">
                 <!-- scrollable -->
@@ -56,7 +58,7 @@
                         <form id="frm" action="{% url 'dogs_classification' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
 
-                            <input type="file" id="file" style="display:none;" />
+                            <input type="file" id="file" name="file" style="display:none;" />
                             <button type="button" onclick="thisFileUpload();" 
                             class="btn waves-effect waves-light" style="background-color:black;">
                                 UPLOAD

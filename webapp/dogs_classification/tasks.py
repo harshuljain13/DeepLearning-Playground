@@ -5,6 +5,7 @@ from scipy.fftpack import fft
 import numpy as np
 from celery.decorators import task
 from celery import current_task, shared_task, result
+import get_inception_model
 
 @task
 def fft_random(n):
@@ -19,6 +20,15 @@ def fft_random(n):
             fft_random.update_state(state='PROGRESS',
                     meta={'process_percent': process_percent})
     return random.random()
+
+@task
+def predict_breed(file_):
+    # get the inception model
+    # get the numpy array of the file
+    # calculate the transfer_value of the image
+    # predict the class of the image
+    # return the class name of the image
+    pass
 
 def get_task_status(task_id):
     # If you have a task_id, this is how you query that task

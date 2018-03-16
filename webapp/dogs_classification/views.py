@@ -11,12 +11,14 @@ def index(request):
     html page then sends the ajax request to the url to get the status
     '''
     if request.method=='POST':
-        #image_file = request.FILES['image_file']
-        #image_file_name = image_file.name
-        #fs = FileSystemStorage()
-        #full_path_image_file = fs.save(image_file_name, image_file)
-        task = tasks.fft_random.delay(10000) # changes required
-        return render(request, template_name='dogs_classification/index.html', context={'task_id': task.id })
+        image_file = request.FILES['file']
+        image_file_name = image_file.name
+        fs = FileSystemStorage()
+        file_ = fs.save(image_file_name, image_file)
+        task = tasks.predict_breed.delay(image_file)
+        #task = tasks.fft_random.delay(10000) # changes required
+        return render(request, template_name='dogs_classification/index.html',
+         context={'task_id': task.id, 'filename':file_})
     if request.method=='GET':
         return render(request, template_name='dogs_classification/index.html')
 
@@ -35,5 +37,4 @@ def poll_state(request):
         status_data = 'This is not ajax request'
 
     json_data = json.dumps(status_data)
-    print json_data
     return HttpResponse(json_data, content_type='application/json')
