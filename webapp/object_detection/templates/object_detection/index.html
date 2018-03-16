@@ -53,12 +53,12 @@
                 <br>
                 <center>
                     <div>
-                        <form action="{% url 'object_detection' %}" method="post" enctype="multipart/form-data">
+                        <form id="frm" action="{% url 'object_detection' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-
-
-                            <button class="btn waves-effect waves-light" style="background-color:black;"
-                                type="submit" name="action">UPLOAD
+                            <input type="file" id="file" style="display:none;" />
+                            <button type="button" onclick="thisFileUpload();" 
+                            class="btn waves-effect waves-light" style="background-color:black;">
+                                UPLOAD
                             </button>
                         </form>
                     </div>
@@ -80,6 +80,17 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+
+<script>
+    
+        function thisFileUpload() {
+                $("#file").click();
+                $("#file").change(function(){
+                    $("#frm").submit();
+                });
+            };
+            
+</script>
 
 <!-- handling progress bar -->
  <script type="text/javascript">
