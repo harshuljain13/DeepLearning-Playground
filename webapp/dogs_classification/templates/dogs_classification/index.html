@@ -36,6 +36,9 @@
                 {% if filename %}
                     <img width="400px" height="300px" src="{{MEDIA_URL}}{{filename}}">
                 {% endif %}
+                <p id="result_output">
+                        
+                </p>
             </div>
             <div class="col s4">
                 <!-- scrollable -->
@@ -119,6 +122,7 @@
                         jQuery('.progress').css({'width': 100 + '%'});
                         jQuery('.progress_percentage').html('Progress: 100%');
                         // jquery to update the result data based on result.result_data passsed by get_task_status
+                        jQuery('#result_output').html(result.result_data)
                        } 
                     else {
                          jQuery('.progress').css({'width': result.process_percent + '%'});

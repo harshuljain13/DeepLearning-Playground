@@ -34,12 +34,10 @@ def predict_breed(file_name):
     current_task.update_state(state='PROGRESS', meta={'process_percent':10})
     image_np = cv2.resize(image_np, (img_size, img_size), interpolation = cv2.INTER_AREA)
     current_task.update_state(state='PROGRESS', meta={'process_percent':20}) 
-    transfer_values = dogs_classification.transfer_values(image_np)
+    transfer_values, transfer_layer_len = dogs_classification.transfer_values(image_np)
     current_task.update_state(state='PROGRESS', meta={'process_percent':70})
-    breed='heell'
-    #breed = dogs_classification.get_predictions(transfer_values)
-    print 'Breed of the dog is :', breed
-    return breed
+    breed = dogs_classification.get_predictions(transfer_values, transfer_layer_len)
+    return 'Breed of the dog is : ' + breed
 
 def get_task_status(task_id):
     # If you have a task_id, this is how you query that task
@@ -48,7 +46,7 @@ def get_task_status(task_id):
     if status == 'SUCCESS':
         result = task.result
         # result_data holds the data for the prediction
-        result_data = "result.split(',')"
+        result_data = result
         process_percent = 100
         return {'status':status, 'process_percent':process_percent, 'result_data':result_data}
     if status == 'PROGRESS':
