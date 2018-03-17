@@ -1,13 +1,16 @@
 import time
 import os
 import random
-from scipy.fftpack import fft
+import dogs_classification
 import numpy as np
+from scipy.fftpack import fft
 from celery.decorators import task
 from celery import current_task, shared_task, result
-import get_inception_model
+from django.conf import settings
+import cv2
+img_size = 299
 
-@task
+@shared_task
 def fft_random(n):
     """
     Brainless number crunching just to have a substantial task:
@@ -22,17 +25,25 @@ def fft_random(n):
     return random.random()
 
 @task
-def predict_breed(file_):
-    # get the inception model
-    # get the numpy array of the file
-    # calculate the transfer_value of the image
-    # predict the class of the image
-    # return the class name of the image
-    pass
+def predict_breed(file_name):
+    current_task.update_state(state='PROGRESS', meta={'process_percent':0})
+    media_root = settings.MEDIA_ROOT
+    current_task.update_state(state='PROGRESS', meta={'process_percent':2})
+    full_file_path = os.path.join(media_root, file_name)
+    image_np = cv2.imread(full_file_path)
+    current_task.update_state(state='PROGRESS', meta={'process_percent':10})
+    image_np = cv2.resize(image_np, (img_size, img_size), interpolation = cv2.INTER_AREA)
+    current_task.update_state(state='PROGRESS', meta={'process_percent':20}) 
+    transfer_values = dogs_classification.transfer_values(image_np)
+    current_task.update_state(state='PROGRESS', meta={'process_percent':70})
+    breed='heell'
+    #breed = dogs_classification.get_predictions(transfer_values)
+    print 'Breed of the dog is :', breed
+    return breed
 
 def get_task_status(task_id):
     # If you have a task_id, this is how you query that task
-    task = fft_random.AsyncResult(task_id)
+    task = predict_breed.AsyncResult(task_id)
     status = task.status
     if status == 'SUCCESS':
         result = task.result

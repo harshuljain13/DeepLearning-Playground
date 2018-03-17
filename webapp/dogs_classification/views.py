@@ -15,8 +15,9 @@ def index(request):
         image_file_name = image_file.name
         fs = FileSystemStorage()
         file_ = fs.save(image_file_name, image_file)
-        task = tasks.predict_breed.delay(image_file)
-        #task = tasks.fft_random.delay(10000) # changes required
+        print 'Input File is :', file_
+        task = tasks.predict_breed.delay(file_)
+        #task = tasks.fft_random.delay(1000) # changes required
         return render(request, template_name='dogs_classification/index.html',
          context={'task_id': task.id, 'filename':file_})
     if request.method=='GET':
