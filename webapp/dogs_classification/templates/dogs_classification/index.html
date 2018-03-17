@@ -1,5 +1,5 @@
 {% extends "home/base.html" %}
-{% load static %}
+{% load staticfiles %}
 {% block head %}
     <style>
         .progress {
@@ -43,24 +43,23 @@
             <div class="col s4">
                 <!-- scrollable -->
                 <div class="collection" style="margin:0px; overflow-y:scroll; height:300px;">
-                            <a href="#!" class="collection-item">Image1</a>
-                            <a href="#!" class="collection-item active">Image2</a>
-                            <a href="#!" class="collection-item">Image3</a>
-                            <a href="#!" class="collection-item">Image4</a>
-                            <a href="#!" class="collection-item">Image1</a>
-                            <a href="#!" class="collection-item">Image2</a>
-                            <a href="#!" class="collection-item">Image3</a>
-                            <a href="#!" class="collection-item">Image4</a>
-                            <a href="#!" class="collection-item">Image1</a>
-                            <a href="#!" class="collection-item">Image2</a>
-                            <a href="#!" class="collection-item">Image3</a>
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/1.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/2.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/3.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/4.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/5.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/6.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/7.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/8.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/9.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "dogs_classification/images/10.jpg" %}">
                 </div>
                 <br>
                 <center>
                     <div>
                         <form id="frm" action="{% url 'dogs_classification' %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-
+                            <input type="text" id="imgupload" name="img_upload" style="display:none;"/>
                             <input type="file" id="file" name="file" style="display:none;" />
                             <button type="button" onclick="thisFileUpload();" 
                             class="btn waves-effect waves-light" style="background-color:black;">
@@ -94,7 +93,12 @@
                 $("#frm").submit();
             });
         };
-        
+    
+    function thisimageUpload(_src) {
+        console.log(_src);
+        document.getElementById('imgupload').value = _src;
+        $("#frm").submit();
+    };
 </script>
 <!-- handling progress bar -->
  <script type="text/javascript">

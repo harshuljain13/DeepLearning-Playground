@@ -2,6 +2,7 @@ from . import tasks
 import json
 from django.shortcuts import render, HttpResponse
 from django.core.files.storage import FileSystemStorage
+from django.contrib.staticfiles.templatetags.staticfiles import static
 # Create your views here.
 
 def index(request):
@@ -11,8 +12,13 @@ def index(request):
     html page then sends the ajax request to the url to get the status
     '''
     if request.method=='POST':
-        image_file = request.FILES['file']
-        image_file_name = image_file.name
+        try:
+            image_file = request.FILES['file']
+            image_file_name = image_file.name
+        except:
+            image_file_name = request.POST['img_upload'].split('/')[-1]
+            print('Image file is :',image_file_name)
+            image_file = open((static('dogs_classification/Images/' + image_file_name))[1:])
         fs = FileSystemStorage()
         file_ = fs.save(image_file_name, image_file)
         print 'Input File is :', file_

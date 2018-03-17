@@ -35,6 +35,7 @@ for dir_ in os.listdir(data_dir):
 
 def transfer_values(image_np):
     # inception layer
+    tf.reset_default_graph()
     inception_dir = '../../data/inception'
     path_uid_to_cls = "imagenet_2012_challenge_label_map_proto.pbtxt"
     path_uid_to_name = "imagenet_synset_to_human_label_map.txt"
@@ -98,6 +99,7 @@ def transfer_values(image_np):
 
 def get_predictions(transfer_values, transfer_layer_len):
     # transfer learning model beyond freezed layers
+    tf.reset_default_graph()
     x = tf.placeholder(tf.float32, shape=[None, transfer_layer_len], name='x')
     fc1 = tf.layers.dense(inputs=x, name='layer_fc1', units=1024, activation=tf.nn.relu)
     logits = tf.layers.dense(inputs=fc1, name='layer_fc_out', units=num_classes, activation=None)
@@ -116,4 +118,6 @@ def get_predictions(transfer_values, transfer_layer_len):
     y_pred_ = np.squeeze(y_pred_)
     y_pred_cls_ = np.argmax(y_pred_)
     class_name = label_cls_name_map[y_pred_cls_]
+    session.close()
+
     return class_name
