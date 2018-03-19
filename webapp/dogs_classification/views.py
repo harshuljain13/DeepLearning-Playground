@@ -18,7 +18,7 @@ def index(request):
         except:
             image_file_name = request.POST['img_upload'].split('/')[-1]
             print('Image file is :',image_file_name)
-            image_file = open((static('dogs_classification/Images/' + image_file_name))[1:])
+            image_file = open((static('dogs_classification/images/' + image_file_name))[1:])
         fs = FileSystemStorage()
         file_ = fs.save(image_file_name, image_file)
         print 'Input File is :', file_
