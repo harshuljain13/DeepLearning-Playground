@@ -19,20 +19,11 @@ num_classes = 120
 
 # making the maps [alternative is to load it from saved json]
 label_cls_name_map = {}
-label_name_cls_map = {}
 
-# fix to be done
-label_cls=0
-for dir_ in os.listdir(data_dir):
-    try:
-        if '.DS_Store' in dir_:
-            continue
-        class_name = re.sub(r'n\d+-', '', dir_)
-        label_cls_name_map[label_cls] = class_name
-        label_name_cls_map[class_name] = label_cls
-        label_cls +=1
-    except Exception, err:
-        print Exception, err
+with open('../dl_models/dogs_checkpoints/label_cls_name.json', 'r') as f:
+    label_cls_json = f.read()
+
+label_cls_name_map = json.loads(label_cls_json)
 
 def transfer_values(image_np):
     # inception layer
@@ -124,7 +115,7 @@ def get_predictions(transfer_values, transfer_layer_len):
     y_pred_ = session.run(y_pred, feed_dict=feed_dict)
     y_pred_ = np.squeeze(y_pred_)
     y_pred_cls_ = np.argmax(y_pred_)
-    class_name = label_cls_name_map[y_pred_cls_]
+    class_name = label_cls_name_map[str(y_pred_cls_)]
     session.close()
 
     return class_name
