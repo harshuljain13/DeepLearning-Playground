@@ -21,6 +21,7 @@ num_classes = 120
 label_cls_name_map = {}
 label_name_cls_map = {}
 
+# fix to be done
 label_cls=0
 for dir_ in os.listdir(data_dir):
     try:
@@ -100,10 +101,14 @@ def transfer_values(image_np):
 def get_predictions(transfer_values, transfer_layer_len):
     # transfer learning model beyond freezed layers
     tf.reset_default_graph()
+    
     x = tf.placeholder(tf.float32, shape=[None, transfer_layer_len], name='x')
     fc1 = tf.layers.dense(inputs=x, name='layer_fc1', units=1024, activation=tf.nn.relu)
-    logits = tf.layers.dense(inputs=fc1, name='layer_fc_out', units=num_classes, activation=None)
-
+    fc2 = tf.layers.dense(inputs=fc1, name='layer_fc2', units=512, activation=tf.nn.relu)
+    fc3 = tf.layers.dense(inputs=fc2, name='layer_fc3', units=256, activation=tf.nn.relu)
+    
+    logits = tf.layers.dense(inputs=fc3, name='layer_fc_out', units=num_classes, activation=None)
+    
     y_true = tf.placeholder(tf.float32, shape=[None, num_classes], name='y_true')
     y_true_cls = tf.argmax(y_true, axis=1)
 
@@ -113,6 +118,8 @@ def get_predictions(transfer_values, transfer_layer_len):
 
     # loading the saved model from the checkpoints directory
     session.run(tf.global_variables_initializer())
+    saver= tf.train.Saver()
+    saver.restore(sess=session, save_path='../dl_models/dogs_checkpoints/best_validation')
     feed_dict = {x: transfer_values.reshape(1,-1)}
     y_pred_ = session.run(y_pred, feed_dict=feed_dict)
     y_pred_ = np.squeeze(y_pred_)
