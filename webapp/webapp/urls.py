@@ -19,6 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('dogs_classification.urls')),
+    url(r'^', include('ocr_classification.urls')),
     url(r'^', include('home.urls')),
        
 ]

@@ -1,0 +1,147 @@
+{% extends "home/base.html" %}
+{% load staticfiles %}
+{% block head %}
+    <style>
+        .progress {
+        width:0%;
+        height:20px;
+        background:grey;
+        
+        }
+        .bar {
+        height:20px;
+        width:100%;
+        background:black;
+        }
+    </style>
+{% endblock %}
+
+{% block subtitle %}
+    <font size="4">| Optical Character Recognition</font>
+{% endblock %}
+
+{% block demodiv %}
+<div class="container" style="width: 80%;">
+    <div style="outline: 3px solid black; margin-top:20px; padding:5px;">
+        <div class="row">
+            <div class="col s8">
+                <h5>Output</h5>
+            </div>
+            <div class="col s4">
+                <h5>Input</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s8">
+                {% if filename %}
+                    <img width="400px" height="300px" src="{{MEDIA_URL}}{{filename}}">
+                {% endif %}
+                <p id="result_output">
+                        
+                </p>
+            </div>
+            <div class="col s4">
+                <!-- scrollable -->
+                <div class="collection" style="margin:0px; overflow-y:scroll; height:300px;">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/1.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/2.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/3.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/4.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/5.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/6.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/7.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/8.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/9.jpg" %}">
+                        <img onclick="thisimageUpload(this.src);" width="100px" height="100px" class="collection-item" src="{% static "ocr_classification/images/10.jpg" %}">
+                </div>
+                <br>
+                <center>
+                    <div>
+                        <form id="frm" action="{% url 'ocr_classification' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="text" id="imgupload" name="img_upload" style="display:none;"/>
+                            <input type="file" id="file" name="file" style="display:none;" />
+                            <button type="button" onclick="thisFileUpload();" 
+                            class="btn waves-effect waves-light" style="background-color:black;">
+                                UPLOAD
+                            </button>
+                        </form>
+                    </div>
+                </center>
+            </div>
+        </div>
+        
+        <p class="progress_percentage"> Progress:</p>
+        <div class="bar">
+            <div class="progress">
+
+            </div>
+        </div>
+    
+
+    </div> <!-- closing box -->
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script>
+    
+    function thisFileUpload() {
+            $("#file").click();
+            $("#file").change(function(){
+                $("#frm").submit();
+            });
+        };
+    
+    function thisimageUpload(_src) {
+        console.log(_src);
+        document.getElementById('imgupload').value = _src;
+        $("#frm").submit();
+    };
+</script>
+<!-- handling progress bar -->
+ <script type="text/javascript">
+    var poll_xhr;
+    var willstop = 0;
+    (function(){
+    var poll = function(){
+      var json_dump = "{{ data }}";
+      var task_id = "{{task_id}}";
+      console.log(task_id);
+      poll_xhr = $.ajax({
+        url:'{% url "dc_poll_state" %}',
+        type: 'POST',
+        data: {
+            task_id: task_id,
+            csrfmiddlewaretoken: "{{csrf_token}}",
+        },
+        success: function(result) {
+            console.log(result)
+                    if (result.process_percent == null || result.process_percent == undefined) {
+                        willstop = 1;
+                       } 
+                    else if (result.process_percent == 100) {
+                        willstop = 1;
+                        jQuery('.progress').css({'width': 100 + '%'});
+                        jQuery('.progress_percentage').html('Progress: 100%');
+                        // jquery to update the result data based on result.result_data passsed by get_task_status
+                        jQuery('#result_output').html(result.result_data)
+                       } 
+                    else {
+                         jQuery('.progress').css({'width': result.process_percent + '%'});
+                         jQuery('.progress_percentage').html('Progress: ' + result.process_percent + '%');
+                       };
+                    }
+      });
+    };
+        var refreshIntervalId = setInterval(function() {
+      poll();
+      if(willstop == 1){
+        clearInterval(refreshIntervalId);
+      }
+    },500);
+   })();
+ </script>
+
+{% endblock %}

@@ -25,7 +25,26 @@
                   </div>
                 </div>
               </div>
+              
+              <!-- Demo 1: OCR -->
+              <div class="col s8 m4">
+                <div class="card">
+                  <div class="card-image">
+                    <img width="400px" height="300px"  src="{% static "home/images/ocr_classification.png" %}">
+                    
+                  </div>
+                  <div class="card-content" >
+                    <span class="card-title">Optical Character Recognition</span>
+                    <p>Creating accurate machine learning model capable of localizing and identifying the characters in the Image.</p>
+                  </div>
+                  <div class="card-action">
+                    <a href="{% url 'ocr_classification' %}" class="waves-effect waves-light btn" style="background-color: black">Click Here for Demo</a>
+                  </div>
+                </div>
+              </div>
+
           </div>
 
+          
 {% endblock %}
         

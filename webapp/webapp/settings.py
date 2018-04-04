@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'dogs_classification',
+    'ocr_classification',
 ]
 
 MIDDLEWARE = [
