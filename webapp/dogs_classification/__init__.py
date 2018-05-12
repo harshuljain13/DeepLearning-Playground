@@ -20,7 +20,7 @@ num_classes = 120
 # making the maps [alternative is to load it from saved json]
 label_cls_name_map = {}
 
-with open('../dl_models/dogs_checkpoints/label_cls_name.json', 'r') as f:
+with open('../../dogs_classification/dogs_checkpoints/label_cls_name.json', 'r') as f:
     label_cls_json = f.read()
 
 label_cls_name_map = json.loads(label_cls_json)
@@ -110,7 +110,7 @@ def get_predictions(transfer_values, transfer_layer_len):
     # loading the saved model from the checkpoints directory
     session.run(tf.global_variables_initializer())
     saver= tf.train.Saver()
-    saver.restore(sess=session, save_path='../dl_models/dogs_checkpoints/best_validation')
+    saver.restore(sess=session, save_path='../../dogs_classification/dogs_checkpoints/best_validation')
     feed_dict = {x: transfer_values.reshape(1,-1)}
     y_pred_ = session.run(y_pred, feed_dict=feed_dict)
     y_pred_ = np.squeeze(y_pred_)
