@@ -11,6 +11,9 @@ def index(request):
     on POST request it adds the fft_random task to the celery queue and sends the task id to the html page.
     html page then sends the ajax request to the url to get the status
     '''
+    with open('dogs_classification/blog.md', 'r') as f:
+        blog_data = f.read()
+
     if request.method=='POST':
         try:
             image_file = request.FILES['file']
@@ -25,9 +28,9 @@ def index(request):
         task = tasks.predict_breed.delay(file_)
         #task = tasks.fft_random.delay(1000) # changes required
         return render(request, template_name='dogs_classification/index.html',
-         context={'task_id': task.id, 'filename':file_})
+         context={'task_id': task.id, 'filename':file_, 'markdown_data': blog_data})
     if request.method=='GET':
-        return render(request, template_name='dogs_classification/index.html')
+        return render(request, template_name='dogs_classification/index.html', context={'markdown_data': blog_data})
 
 def poll_state(request):
     '''

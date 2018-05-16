@@ -1,5 +1,6 @@
 {% extends "home/base.html" %}
 {% load staticfiles %}
+{% load markdown_tag %}
 {% block head %}
     <style>
         .progress {
@@ -80,9 +81,13 @@
     
 
     </div> <!-- closing box -->
-
-
+    <br>
+    <div>
+        {{markdown_data | markdownify | safe}}
+    </div>
 </div>
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script>
