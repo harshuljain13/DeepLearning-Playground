@@ -1,5 +1,7 @@
 from . import tasks
 import json
+import re
+from django.conf import settings
 from django.shortcuts import render, HttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.contrib.staticfiles.templatetags.staticfiles import static
@@ -13,6 +15,7 @@ def index(request):
     '''
     with open('dogs_classification/blog.md', 'r') as f:
         blog_data = f.read()
+        blog_data = re.sub('localhost:8000', settings.MACHINE_IP, blog_data)
 
     if request.method=='POST':
         try:
