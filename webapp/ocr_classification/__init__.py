@@ -9,7 +9,7 @@ from keras.utils.np_utils import to_categorical
 import h5py
 import sys
 
-data_dir = '../../data/NIST19/'
+data_dir = '../../../data/NIST19/'
 
 img_size = 128
 flatten_img_size = img_size*img_size
@@ -20,7 +20,7 @@ num_classes = 62
 # making the maps [alternative is to load it from saved json]
 label_cls_name_map = {}
 
-with open('../../ocr_detection/ocr_checkpoints/label_cls_name.json', 'r') as f:
+with open('../../OCR/label_cls_name.json', 'r') as f:
     label_cls_json = f.read()
 
 label_cls_name_map = json.loads(label_cls_json)
@@ -47,8 +47,8 @@ def get_predictions(image_np):
 
     # loading the saved model from the checkpoints directory
     session.run(tf.global_variables_initializer())
-    saver= tf.train.Saver()
-    saver.restore(sess=session, save_path='../../ocr_detection/ocr_checkpoints/best_validation')
+    #saver= tf.train.Saver()
+    #saver.restore(sess=session, save_path='../../OCR/best_validation')
     shape_ = image_np.shape
     feed_dict = {x: np.reshape(image_np, (1, shape_[0], shape_[1], shape_[2]))}
     y_pred_ = session.run(y_pred, feed_dict=feed_dict)

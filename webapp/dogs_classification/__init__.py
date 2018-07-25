@@ -9,7 +9,7 @@ from keras.utils.np_utils import to_categorical
 import h5py
 import sys
 
-data_dir = '../../data/dogs/Images/'
+data_dir = '../../../data/dogs/Images/'
 
 img_size = 299
 flatten_img_size = img_size*img_size
@@ -20,7 +20,7 @@ num_classes = 120
 # making the maps [alternative is to load it from saved json]
 label_cls_name_map = {}
 
-with open('../../dogs_classification/dogs_checkpoints/label_cls_name.json', 'r') as f:
+with open('../../DogsBreedClassification/dogs_checkpoints/label_cls_name.json', 'r') as f:
     label_cls_json = f.read()
 
 label_cls_name_map = json.loads(label_cls_json)
@@ -28,7 +28,7 @@ label_cls_name_map = json.loads(label_cls_json)
 def transfer_values(image_np):
     # inception layer
     tf.reset_default_graph()
-    inception_dir = '../../data/inception'
+    inception_dir = '../../../data/inception'
     path_uid_to_cls = "imagenet_2012_challenge_label_map_proto.pbtxt"
     path_uid_to_name = "imagenet_synset_to_human_label_map.txt"
     path_graph_def = "classify_image_graph_def.pb"
@@ -110,7 +110,7 @@ def get_predictions(transfer_values, transfer_layer_len):
     # loading the saved model from the checkpoints directory
     session.run(tf.global_variables_initializer())
     saver= tf.train.Saver()
-    saver.restore(sess=session, save_path='../../dogs_classification/dogs_checkpoints/best_validation')
+    saver.restore(sess=session, save_path='../../DogsBreedClassification/dogs_checkpoints/best_validation')
     feed_dict = {x: transfer_values.reshape(1,-1)}
     y_pred_ = session.run(y_pred, feed_dict=feed_dict)
     y_pred_ = np.squeeze(y_pred_)
