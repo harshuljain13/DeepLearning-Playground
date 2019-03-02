@@ -3,7 +3,7 @@
 ```
 $ virtualenv venv
 $ source venv/bin/activate
-$ git clone https://github.com/harshul1610/DeepLearningDemos-WebBackend.ai.git
+$ git clone https://github.com/harshul1610/DeepLearning-Playground.ai.git
 $ cd DeepLearningDemos.ai
 $ pip install -r requirements.txt
 $ cd webapp
