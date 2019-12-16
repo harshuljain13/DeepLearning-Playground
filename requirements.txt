@@ -48,7 +48,7 @@ six==1.11.0
 statsmodels==0.8.0
 subprocess32==3.2.7
 tensorboard==1.6.0
-tensorflow==1.6.0
+tensorflow==1.15.0
 termcolor==1.1.0
 urllib3==1.22
 vine==1.1.4
