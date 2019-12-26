@@ -37,7 +37,7 @@ def transfer_values(image_np):
     cls_uid = {}
     uid_name = {}
 
-    print os.getcwd()
+    print(os.getcwd())
     with open(os.path.join(inception_dir, path_uid_to_name), mode='r') as file:
         lines = file.readlines()
         for line in lines:
@@ -86,7 +86,7 @@ def transfer_values(image_np):
     print(inception_session)
     transfer_values = np.squeeze(inception_session.run(transfer_layer, feed_dict=feed_dict))
     inception_session.close()
-    print transfer_values
+    print(transfer_values)
     return transfer_values, transfer_layer_len
 
 def get_predictions(transfer_values, transfer_layer_len):

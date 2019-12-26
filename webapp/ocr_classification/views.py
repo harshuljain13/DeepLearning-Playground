@@ -2,7 +2,7 @@ from . import tasks
 import json
 from django.shortcuts import render, HttpResponse
 from django.core.files.storage import FileSystemStorage
-from django.contrib.staticfiles.templatetags.staticfiles import static
+from django.templatetags.static import static
 # Create your views here.
 
 def index(request):
@@ -18,10 +18,10 @@ def index(request):
         except:
             image_file_name = request.POST['img_upload'].split('/')[-1]
             print('Image file is :',image_file_name)
-            image_file = open((static('ocr_classification/images/' + image_file_name))[1:])
+            image_file = open((static('ocr_classification/images/' + image_file_name))[1:], 'rb')
         fs = FileSystemStorage()
         file_ = fs.save(image_file_name, image_file)
-        print 'Input File is :', file_
+        print('Input File is :', file_)
         task = tasks.predict_char.delay(file_)
         #task = tasks.fft_random.delay(1000) # changes required
         return render(request, template_name='ocr_classification/index.html',
