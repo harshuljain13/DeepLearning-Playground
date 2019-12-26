@@ -1,5 +1,7 @@
 ## Run Instructions
 
+![Web Page](images/screenshot.png)
+
 ```
 $ virtualenv venv
 $ source venv/bin/activate
