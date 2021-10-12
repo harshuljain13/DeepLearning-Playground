@@ -25,7 +25,7 @@ mistune==0.8.4
 more-itertools==8.0.2
 numpy==1.18.0
 oauthlib==3.1.0
-opencv-python==4.1.2.30
+opencv-python==4.2.0.32
 opt-einsum==3.1.0
 pandas==0.25.3
 protobuf==3.11.2
