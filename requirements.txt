@@ -4,7 +4,7 @@ asgiref==3.2.3
 astor==0.8.1
 billiard==3.6.1.0
 cachetools==4.0.0
-celery==4.4.0
+celery==5.2.2
 certifi==2019.11.28
 chardet==3.0.4
 Django==3.0.1
